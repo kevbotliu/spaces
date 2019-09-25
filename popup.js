@@ -7,6 +7,9 @@
 // Inital populate space elements from synced storage
 chrome.storage.sync.get(null, result => {
   console.log(result);
+
+  let numTabsTotal = 0;
+
   for (let key in result) {
     let space = result[key];
     space.windows = new Set(space.windows);
@@ -16,7 +19,15 @@ chrome.storage.sync.get(null, result => {
         document.getElementById(space.id).classList.add('current-space');
       }
     });
+
+    numTabsTotal += space.tabs.length;
   }
+
+  // Info bar
+  let numSpaces = Object.keys(result).length;
+  let spacesStatus = numSpaces === 1 ? `${numSpaces} space, ` : `${numSpaces} spaces, `;
+  let tabsStatus = numTabsTotal === 1 ? `${numTabsTotal} tab total` : `${numTabsTotal} tabs total`;
+  document.getElementById('status-info').innerHTML = spacesStatus + tabsStatus;
 });
 chrome.tabs.query({currentWindow: true}, tabs => {
   document.getElementById('new-space-input').placeholder = "Add new space for " + tabs.length + " tabs...";
@@ -147,7 +158,7 @@ function loadSpaceTabs(space) {
         }
       })
       // Always close popup on switch
-      window.close();
+      // window.close();
     });
   });
 }
@@ -197,7 +208,7 @@ function submitInput(name) {
     chrome.windows.getCurrent(wd => {
       const id = (Math.floor(Math.random() * (Math.floor(99999999) - Math.ceil(10000000))) + Math.ceil(10000000)).toString();
       const tabList = getFormattedTabs(tabs);
-      const color = 'blah';
+      const color = '#ff3e12';
       const windows = new Set([wd.id]);
 
       let space = setSpace(id, name, color, tabList, windows);

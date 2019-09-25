@@ -13,8 +13,6 @@
         margin: 0;
 
         padding: 0;
-
-        min-height: 220px;
       }
 
       #new-space-container {
@@ -24,7 +22,6 @@
         box-sizing: border-box;
 
         background-color: #e7eaed;
-        
         border-bottom: 1px solid #ccc;
       }
       #input-wrapper {
@@ -74,7 +71,6 @@
         font-size: 14px;
 
         padding: 8px;
-        margin-bottom: 0.5px;
         box-sizing: border-box;
 
         background-color: transparent;
@@ -91,7 +87,7 @@
 
       #space-list-container {
         width: 100%;
-
+        min-height: 180px;
       }
 
       #space-list {
@@ -110,7 +106,13 @@
         height: 60px;
         box-sizing: border-box;
 
+        border-left: none;
+        transition: border-left 0.5s ease;
+
         cursor: pointer;
+      }
+      .space-item:last-of-type {
+        border-bottom: none;
       }
 
       .space-item:hover {
@@ -118,7 +120,31 @@
       }
 
       .current-space {
-        border: 1px solid orange;
+        border-left: 8px solid #e7eaed;
+      }
+
+      #info-container {
+        height: 24px;
+        width: 100%;
+        background-color: #e7eaed;
+
+        border-top: 1px solid #ccc;
+        padding: 0 8px;
+        box-sizing: border-box;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #status-info {
+        font-size: 11px;
+        color: #777;
+      }
+      #settings-link {
+        font-size: 11px;
+
+        margin: 0;
+        padding: 0;
       }
 
     </style>
@@ -127,10 +153,9 @@
     <header id="new-space-container">
       <div id="input-wrapper">
         <button id="input-color-select" class="input-button"></button>
-        <input type="text" id="new-space-input" spellcheck="false" autofocus>
+        <input type="text" id="new-space-input" spellcheck="false" autocapitalize="sentences" autofocus>
         <button id="input-submit" class="input-button"></button>
       </div>
-
     </header>
     <div id="space-list-container">
       <ul id="space-list">
@@ -138,6 +163,10 @@
 
         </li> -->
       </ul>
+    </div>
+    <div id="info-container">
+      <span id="status-info"></span>
+      <a href="/" id="settings-link">Settings...</a>
     </div>
     <script src="popup.js"></script>
   </body>
