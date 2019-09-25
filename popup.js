@@ -67,10 +67,6 @@ function setSpace(id, name, color, tabList, windows) {
     'color': color,
     'windows': [...windows]
   };
-  
-  chrome.storage.sync.set({[id]: space}, () => {
-    console.log(`Set space ${name} of ${tabList.length} tabs with ID: ${id} and color: ${color}`);
-  })
 
   // If new, switch to current space but don't reload tabs
   chrome.storage.sync.get(null, result => {
@@ -78,6 +74,10 @@ function setSpace(id, name, color, tabList, windows) {
       setCurrentSpace(id, false);
     }
   });
+  
+  chrome.storage.sync.set({[id]: space}, () => {
+    console.log(`Set space ${name} of ${tabList.length} tabs with ID: ${id} and color: ${color}`);
+  })
 
   return space;
 }
