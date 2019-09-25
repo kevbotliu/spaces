@@ -9,6 +9,34 @@
   "browser_action": {
     "default_popup": "./popup.html"
   },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "commands": {
+    "create-new-space": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Create a new space from existing"
+    },
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y",
+        "chromeos": "Ctrl+Shift+U",
+        "linux": "Ctrl+Shift+J"
+      }
+    },
+    "_execute_page_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "windows": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
+      }
+    }
+  },
   "permissions": ["tabs", "declarativeContent", "storage"],
   "manifest_version": 2
 }

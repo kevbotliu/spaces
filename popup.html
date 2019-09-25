@@ -52,15 +52,20 @@
       }
       #input-color-select {
         background-color: #005587;
-        border-radius: 4px;
         border: 1px solid #2774ae;
+        border-radius: 4px;
       }
       #input-submit {
         background: url("./plus.svg");
         background-position: center;
         background-size: contain;
+        padding: 8px;
 
         border: none;
+        border-radius: 8px;
+      }
+      #input-submit:hover {
+        background-color: rgba(0,0,0,0.15);
       }
       #new-space-input {
         flex-grow: 1;
@@ -122,7 +127,7 @@
     <header id="new-space-container">
       <div id="input-wrapper">
         <button id="input-color-select" class="input-button"></button>
-        <input type="text" id="new-space-input" spellcheck="false">
+        <input type="text" id="new-space-input" spellcheck="false" autofocus>
         <button id="input-submit" class="input-button"></button>
       </div>
 
