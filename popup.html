@@ -3,7 +3,7 @@
   <head>
     <style>
       body {
-        width: 260px;
+        width: 280px;
 
         display: flex;
         flex-direction: column;
@@ -31,12 +31,12 @@
         align-items: center;
 
         width: 100%;
-        padding: 0 12px;
+        padding: 0 16px;
         box-sizing: border-box;
       }
       .input-button {
-        height: 16px;
-        width: 16px;
+        height: 18px;
+        width: 18px;
 
         padding: 0;
 
@@ -69,6 +69,7 @@
         flex-basis: 60px;
         border-radius: 4px;
         font-size: 14px;
+        font-weight:500;
 
         padding: 8px;
         box-sizing: border-box;
@@ -94,35 +95,59 @@
         padding: 0;
         margin: 0;
         list-style: none;
-      }
+      } 
+
+
+
+
+
+
+
+
+
       .space-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
-        padding: 0 16px;
         border-bottom: 1px solid #ebebeb;
 
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 500;
         height: 60px;
         box-sizing: border-box;
 
         border-left: none;
         transition: border-left 0.5s ease;
+
+        cursor: pointer;
       }
       .space-item:last-of-type {
         border-bottom: none;
       }
-
       .space-item:hover {
         background-color: rgba(0,0,0,0.025);
       }
-
       .current-space {
         border-left: 8px solid #e7eaed;
       }
 
+      .space-item-body {
+        padding: 0 16px;
+      }
+
+      .space-button-wrapper {
+        padding: 0 16px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .space-button-wrapper:hover {
+        background-color: rgba(0,0,0,0.025);
+      }
+      .space-item:hover .space-button-wrapper {
+        border-left: 1px solid #ebebeb;
+      }
       .space-button {
         opacity: 0.65;
         border: none;
@@ -130,16 +155,20 @@
         height: 18px;
         width: 18px;
         cursor: pointer;
-      }
-      .space-button:hover {
-        opacity: 0.75;
-        background-color: rgba(0,0,0,1);
-      }
-      #space-item-more {
+
         background: url("./more-vertical.svg");
         background-position: center;
         background-size: contain;
       }
+      
+
+
+
+
+
+
+
+
 
       #info-container {
         height: 24px;
@@ -186,6 +215,16 @@
       .space-panel-visible {
         transform: translateY(0%);
       }
+      #panel-heading {
+        flex-grow: 1;
+        flex-basis: 60px;
+        font-size: 15px;
+        font-weight: 500;
+
+        padding: 8px;
+        margin: 0;
+        box-sizing: border-box;
+      }
       #close-button {
         background: url("./x.svg");
         background-position: center;
@@ -197,6 +236,26 @@
       }
       #close-button:hover {
         background-color: rgba(0,0,0,0.15);
+      }
+      #space-panel-body {
+         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #space-delete {
+        width: 120px;
+        height: 35px;
+
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: rgba(220,0,0,0.65);
+        border: none;
+        border-radius: 4px;
+
+
+        text-transform: uppercase;
       }
 
     </style>
@@ -212,7 +271,14 @@
     <div id="space-list-container">
       <ul id="space-list">
         <!-- <li class="space-item">
-
+          <div class="space-item-body">
+            <span class="space-item-title">
+              Blah
+            </span>
+          </div>
+          <div class="space-button-wrapper">
+            <button class="space-button"></button>
+          </div>
         </li> -->
       </ul>
     </div>
@@ -224,10 +290,13 @@
     <div class="space-panel-container">
       <header id="new-space-container">
         <div id="input-wrapper">
-          <input type="text" id="new-space-input" spellcheck="false" autocapitalize="sentences" autofocus>
+          <h3 id="panel-heading">Volunteer Center</h3>
           <button id="close-button" class="input-button"></button>
         </div>
       </header>
+      <div id="space-panel-body">
+        <button id="space-delete">Delete</button>
+      </div>
     </div>
     <script src="popup.js"></script>
   </body>

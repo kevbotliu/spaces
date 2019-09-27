@@ -35,9 +35,13 @@ chrome.tabs.query({currentWindow: true}, tabs => {
 chrome.storage.onChanged.addListener((changes, areaName) => {
   console.log(changes);
   for (let key in changes) {
-    // New space
+    // Space added
     if (!('oldValue' in changes[key])) {
       addSpaceElement(changes[key].newValue);
+    }
+    // Space removed
+    else if (!('newValue' in changes[key])) {
+      removeSpaceElement(changes[key].oldValue);
     }
     // Space modified
     else {
@@ -74,6 +78,7 @@ function setSpace(id, name, color, tabList, windows) {
     'name': name,
     'tabs': tabList,
     'color': color,
+    'last_accessed': null,
     'windows': [...windows]
   };
 
@@ -179,42 +184,62 @@ function getFormattedTabs(tabs) {
 function addSpaceElement(space) {
   const spacesList = document.getElementById('space-list');
 
-  const spacesItem = document.createElement('LI');
-  const spacesItemText = document.createTextNode(space.name);
-  spacesItem.appendChild(spacesItemText);
+  const spaceItem = document.createElement('LI');
+  spaceItem.id = space.id;
+  spaceItem.classList.add('space-item');
+  spacesList.appendChild(spaceItem);
 
-  const spacesItemMoreButton = document.createElement('BUTTON');
-  spacesItemMoreButton.id = 'space-item-more';
-  spacesItemMoreButton.classList.add('space-button');
-  spacesItemMoreButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    openSpacePanel();
+  const spaceItemBody = document.createElement('DIV');
+  spaceItemBody.classList.add('space-item-body');
+  spaceItem.appendChild(spaceItemBody);
+  
+  const spaceItemTitle = document.createElement('SPAN');
+  spaceItemTitle.classList.add('space-item-title');
+  const spaceItemTitleText = document.createTextNode(space.name);
+  spaceItemTitle.appendChild(spaceItemTitleText);
+  spaceItemBody.appendChild(spaceItemTitle);
+
+  const spaceButtonWrapper = document.createElement('DIV');
+  spaceButtonWrapper.classList.add('space-button-wrapper');
+  spaceItem.appendChild(spaceButtonWrapper);
+
+  const spaceButton = document.createElement('BUTTON');
+  spaceButton.classList.add('space-button');
+  spaceButtonWrapper.appendChild(spaceButton);
+
+  
+  spaceItem.addEventListener('click', (e) => {
+    setCurrentSpace(space.id)
   });
-  spacesItem.appendChild(spacesItemMoreButton);
-
-
-
-
-
-
-
-
-
-
-  spacesItem.id = space.id;
-  spacesItem.classList.add('space-item');
-  spacesItem.addEventListener('click', () => setCurrentSpace(space.id))
-  spacesList.appendChild(spacesItem);
+  spaceButtonWrapper.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openSpacePanel(e);
+  });
 }
 
-function openSpacePanel() {
+function removeSpaceElement(space) {
+  document.getElementById(space.id).remove();
+}
+
+function openSpacePanel(spaceId) {
+  // let spaceTitleEl = e.target.parentNode.firstChild;
+  // document.getElementById('panel-heading').innerHTML = spaceTitleEl.innerHTML;
+
   document.getElementsByClassName('space-panel-container')[0].classList.add('space-panel-visible');
 }
-
 
 document.getElementById('close-button').addEventListener('click', () => {
   document.getElementsByClassName('space-panel-container')[0].classList.remove('space-panel-visible');
 });
+
+document.getElementById('space-delete').addEventListener('click', () => {
+
+})
+
+
+
+
+
 
 // Input submit event listeners
 document.getElementById('new-space-input').addEventListener("keypress", (e) => {
