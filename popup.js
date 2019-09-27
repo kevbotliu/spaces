@@ -6,8 +6,6 @@
 
 // Inital populate space elements from synced storage
 chrome.storage.sync.get(null, result => {
-  console.log(result);
-
   let numTabsTotal = 0;
 
   for (let key in result) {
@@ -184,14 +182,39 @@ function addSpaceElement(space) {
   const spacesItem = document.createElement('LI');
   const spacesItemText = document.createTextNode(space.name);
   spacesItem.appendChild(spacesItemText);
+
+  const spacesItemMoreButton = document.createElement('BUTTON');
+  spacesItemMoreButton.id = 'space-item-more';
+  spacesItemMoreButton.classList.add('space-button');
+  spacesItemMoreButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openSpacePanel();
+  });
+  spacesItem.appendChild(spacesItemMoreButton);
+
+
+
+
+
+
+
+
+
+
   spacesItem.id = space.id;
   spacesItem.classList.add('space-item');
-  
   spacesItem.addEventListener('click', () => setCurrentSpace(space.id))
-
   spacesList.appendChild(spacesItem);
 }
 
+function openSpacePanel() {
+  document.getElementsByClassName('space-panel-container')[0].classList.add('space-panel-visible');
+}
+
+
+document.getElementById('close-button').addEventListener('click', () => {
+  document.getElementsByClassName('space-panel-container')[0].classList.remove('space-panel-visible');
+});
 
 // Input submit event listeners
 document.getElementById('new-space-input').addEventListener("keypress", (e) => {
