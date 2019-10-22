@@ -6,10 +6,15 @@
 
 // Inital populate space elements from synced storage
 chrome.storage.sync.get(null, result => {
-  let numTabsTotal = 0;
+  let items = Object.keys(result).map(key => {
+    return [key, result[key]];
+  });
+  items.sort((first, second) => {
+    return first[1].last_accessed - second[1].last_accessed;
+  });
 
-  for (let key in result) {
-    let space = result[key];
+  items.forEach(s => {
+    let space = s[1];
     space.windows = new Set(space.windows);
     addSpaceElement(space);
     chrome.windows.getCurrent(wd => {
@@ -17,15 +22,9 @@ chrome.storage.sync.get(null, result => {
         document.getElementById(space.id).classList.add('current-space');
       }
     });
+  })
 
-    numTabsTotal += space.tabs.length;
-  }
-
-  // Info bar
-  let numSpaces = Object.keys(result).length;
-  let spacesStatus = numSpaces === 1 ? `${numSpaces} space, ` : `${numSpaces} spaces, `;
-  let tabsStatus = numTabsTotal === 1 ? `${numTabsTotal} tab total` : `${numTabsTotal} tabs total`;
-  document.getElementById('status-info').innerHTML = spacesStatus + tabsStatus;
+  updateStatusInfo();
 });
 chrome.tabs.query({currentWindow: true}, tabs => {
   document.getElementById('new-space-input').placeholder = "Add new space for " + tabs.length + " tabs...";
@@ -63,11 +62,25 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     }
   }
 
-
+  updateSpacesInfo();
 })
 
 
-
+function updateStatusInfo() {
+  chrome.storage.sync.get(null, result => {
+    let numTabsTotal = 0;
+  
+    for (let key in result) {
+      let space = result[key];
+      numTabsTotal += space.tabs.length;
+    }
+  
+    let numSpaces = Object.keys(result).length;
+    let spacesStatus = numSpaces === 1 ? `${numSpaces} space, ` : `${numSpaces} spaces, `;
+    let tabsStatus = numTabsTotal === 1 ? `${numTabsTotal} tab total` : `${numTabsTotal} tabs total`;
+    document.getElementById('status-info').innerHTML = spacesStatus + tabsStatus;
+  });
+}
 
 function setSpace(id, name, color, tabList, windows) {
   if (tabList.length > 50) return; // Hitting max tab limit
@@ -78,7 +91,7 @@ function setSpace(id, name, color, tabList, windows) {
     'name': name,
     'tabs': tabList,
     'color': color,
-    'last_accessed': null,
+    'last_accessed': Date.now(),
     'windows': [...windows]
   };
 
@@ -123,6 +136,7 @@ function setCurrentSpace(spaceId, loadTabs=true) {
       let space = result[spaceId];
       space.windows = new Set(space.windows);
       space.windows = [...space.windows.add(wd.id)];
+      space.last_accessed = Date.now();
 
       chrome.storage.sync.set({[spaceId]: space}, () => {
         console.log(`Set space '${space.name}' with ID: ${spaceId} as current space`);
@@ -173,7 +187,8 @@ function getFormattedTabs(tabs) {
   return tabs.map(tb => {
     return {
       id: tb.id,
-      windowId: tb.windowId,
+      title: tb.title,
+      favIconUrl: tb.favIconUrl,
       pinned: tb.pinned,
       url: tb.url
     };
@@ -187,7 +202,7 @@ function addSpaceElement(space) {
   const spaceItem = document.createElement('LI');
   spaceItem.id = space.id;
   spaceItem.classList.add('space-item');
-  spacesList.appendChild(spaceItem);
+  spacesList.prepend(spaceItem);
 
   const spaceItemBody = document.createElement('DIV');
   spaceItemBody.classList.add('space-item-body');
@@ -213,28 +228,30 @@ function addSpaceElement(space) {
   });
   spaceButtonWrapper.addEventListener('click', (e) => {
     e.stopPropagation();
-    openSpacePanel(e);
+    openSpacePanel(space.id);
   });
 }
 
 function removeSpaceElement(space) {
   document.getElementById(space.id).remove();
+  document.getElementsByClassName('space-panel-container')[0].classList.remove('space-panel-visible');
 }
 
 function openSpacePanel(spaceId) {
-  // let spaceTitleEl = e.target.parentNode.firstChild;
-  // document.getElementById('panel-heading').innerHTML = spaceTitleEl.innerHTML;
-
+  chrome.storage.sync.get([spaceId], result => {
+    document.getElementById('panel-heading').innerHTML = result[spaceId].name;
+  });
+  document.getElementsByClassName('space-panel-container')[0].id = spaceId;
   document.getElementsByClassName('space-panel-container')[0].classList.add('space-panel-visible');
+  document.getElementById('space-delete').addEventListener('click', () => {
+    removeSpace(spaceId);
+  })
 }
 
 document.getElementById('close-button').addEventListener('click', () => {
   document.getElementsByClassName('space-panel-container')[0].classList.remove('space-panel-visible');
 });
 
-document.getElementById('space-delete').addEventListener('click', () => {
-
-})
 
 
 

@@ -13,9 +13,26 @@
         margin: 0;
 
         padding: 0;
+        overscroll-behavior-y: none;
+      }
+
+      #main-wrapper {
+        display: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        max-height: 515px;
+        overflow: scroll;
       }
 
       #new-space-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        z-index: 9999;
+
         width: 100%;
 
         padding: 0;
@@ -86,9 +103,15 @@
         color: #333;
       }
 
+
+
+
       #space-list-container {
+        margin-top: 40px;
+        margin-bottom: 24px;
         width: 100%;
-        min-height: 180px;
+        height: 100%;
+        overflow: scroll;
       }
 
       #space-list {
@@ -171,8 +194,15 @@
 
 
       #info-container {
-        height: 24px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+
+        z-index: 9999;
+
         width: 100%;
+
+        height: 24px;
         background-color: #e7eaed;
 
         border-top: 1px solid #ccc;
@@ -204,6 +234,7 @@
         top: 0;
         left: 0;
 
+        min-height: 200px;
         height: 100%;
         width: 100%;
 
@@ -238,7 +269,10 @@
         background-color: rgba(0,0,0,0.15);
       }
       #space-panel-body {
-         width: 100%;
+        margin-top: 40px;
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -250,42 +284,48 @@
         font-size: 14px;
         font-weight: bold;
         color: white;
-        background-color: rgba(220,0,0,0.65);
+        background-color: #e64848;
         border: none;
         border-radius: 4px;
 
 
         text-transform: uppercase;
       }
+      #space-delete:hover {
+        background-color: #c41b1b;
+      }
 
     </style>
   </head>
   <body>
-    <header id="new-space-container">
-      <div id="input-wrapper">
-        <button id="input-color-select" class="input-button"></button>
-        <input type="text" id="new-space-input" spellcheck="false" autocapitalize="sentences" autofocus>
-        <button id="input-submit" class="input-button"></button>
+    <div id="main-wrapper">
+      <header id="new-space-container">
+        <div id="input-wrapper">
+          <button id="input-color-select" class="input-button"></button>
+          <input type="text" id="new-space-input" spellcheck="false" autocapitalize="sentences" autofocus>
+          <button id="input-submit" class="input-button"></button>
+        </div>
+      </header>
+      <div id="space-list-container">
+        <ul id="space-list">
+          <!-- <li class="space-item">
+            <div class="space-item-body">
+              <span class="space-item-title">
+                Blah
+              </span>
+            </div>
+            <div class="space-button-wrapper">
+              <button class="space-button"></button>
+            </div>
+          </li> -->
+        </ul>
       </div>
-    </header>
-    <div id="space-list-container">
-      <ul id="space-list">
-        <!-- <li class="space-item">
-          <div class="space-item-body">
-            <span class="space-item-title">
-              Blah
-            </span>
-          </div>
-          <div class="space-button-wrapper">
-            <button class="space-button"></button>
-          </div>
-        </li> -->
-      </ul>
+      <div id="info-container">
+        <span id="status-info"></span>
+        <a href="#" id="options-link">Options...</a>
+      </div>
     </div>
-    <div id="info-container">
-      <span id="status-info"></span>
-      <a href="#" id="options-link">Options...</a>
-    </div>
+    
 
     <div class="space-panel-container">
       <header id="new-space-container">

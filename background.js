@@ -15,6 +15,10 @@ function updateBadgeTabCount() {
 
 
 
+
+
+
+
 chrome.runtime.onStartup.addListener(() => {
 
 })
